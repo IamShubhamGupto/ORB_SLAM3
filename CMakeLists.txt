@@ -7,10 +7,10 @@ ENDIF()
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -I/opt/local/include -Wall -I/opt/homebrew/Cellar/boost/1.83.0/include -L /opt/homebrew/Cellar/boost/1.83.0/lib -L /opt/homebrew/Cellar/openssl@3/3.1.3/lib -I/opt/homebrew/Cellar/glew/2.2.0_1/include -I/opt/homebrew/Cellar/openssl@3/3.1.3/include  -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/local/include -Wall -I/opt/homebrew/Cellar/boost/1.83.0/include -L /opt/homebrew/Cellar/boost/1.83.0/lib -L /opt/homebrew/Cellar/openssl@3/3.1.3/lib  -I/opt/homebrew/Cellar/glew/2.2.0_1/include -I/opt/homebrew/Cellar/openssl@3/3.1.3/include -O3")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ")
 
 # Check C++11 or C++0x support
 include(CheckCXXCompilerFlag)
@@ -30,6 +30,8 @@ endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
+
+
 find_package(OpenCV 4.4)
    if(NOT OpenCV_FOUND)
       message(FATAL_ERROR "OpenCV > 4.4 not found.")
@@ -41,6 +43,7 @@ MESSAGE(${OpenCV_VERSION})
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(realsense2)
+find_package(Boost 1.83.0 REQUIRED)
 
 include_directories(
 ${PROJECT_SOURCE_DIR}
@@ -48,7 +51,7 @@ ${PROJECT_SOURCE_DIR}/include
 ${PROJECT_SOURCE_DIR}/include/CameraModels
 ${PROJECT_SOURCE_DIR}/Thirdparty/Sophus
 ${EIGEN3_INCLUDE_DIR}
-${Pangolin_INCLUDE_DIRS}
+${Boost_INCLUDE_DIRS}
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -119,8 +122,8 @@ target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
 ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
-${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
-${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
+${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.dylib
+${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.dylib
 -lboost_serialization
 -lcrypto
 )
